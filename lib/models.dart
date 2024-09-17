@@ -1,22 +1,23 @@
+
 // lib/models.dart
 
 class Dimension {
-  final int mass;
-  final int length;
-  final int time;
-  final int electricCurrent;
-  final int temperature;
-  final int amountOfSubstance;
-  final int luminousIntensity;
+  final double mass;
+  final double length;
+  final double time;
+  final double electricCurrent;
+  final double temperature;
+  final double amountOfSubstance;
+  final double luminousIntensity;
 
   Dimension({
-    this.mass = 0,
-    this.length = 0,
-    this.time = 0,
-    this.electricCurrent = 0,
-    this.temperature = 0,
-    this.amountOfSubstance = 0,
-    this.luminousIntensity = 0,
+    this.mass = 0.0,
+    this.length = 0.0,
+    this.time = 0.0,
+    this.electricCurrent = 0.0,
+    this.temperature = 0.0,
+    this.amountOfSubstance = 0.0,
+    this.luminousIntensity = 0.0,
   });
 
   // Multiply two dimensions
@@ -28,23 +29,55 @@ class Dimension {
       electricCurrent: this.electricCurrent + other.electricCurrent,
       temperature: this.temperature + other.temperature,
       amountOfSubstance:
-      this.amountOfSubstance + other.amountOfSubstance,
+          this.amountOfSubstance + other.amountOfSubstance,
       luminousIntensity:
-      this.luminousIntensity + other.luminousIntensity,
+          this.luminousIntensity + other.luminousIntensity,
     );
   }
 
-  // Check equality of two dimensions
+  // Divide two dimensions
+  Dimension operator /(Dimension other) {
+    return Dimension(
+      mass: this.mass - other.mass,
+      length: this.length - other.length,
+      time: this.time - other.time,
+      electricCurrent: this.electricCurrent - other.electricCurrent,
+      temperature: this.temperature - other.temperature,
+      amountOfSubstance:
+          this.amountOfSubstance - other.amountOfSubstance,
+      luminousIntensity:
+          this.luminousIntensity - other.luminousIntensity,
+    );
+  }
+
+  // Raise a dimension to a power
+  Dimension pow(double exponent) {
+    return Dimension(
+      mass: this.mass * exponent,
+      length: this.length * exponent,
+      time: this.time * exponent,
+      electricCurrent: this.electricCurrent * exponent,
+      temperature: this.temperature * exponent,
+      amountOfSubstance:
+          this.amountOfSubstance * exponent,
+      luminousIntensity:
+          this.luminousIntensity * exponent,
+    );
+  }
+
+  // Check equality of two dimensions (with a tolerance for floating-point precision)
   @override
-  bool operator ==(Object other) =>
-      other is Dimension &&
-          mass == other.mass &&
-          length == other.length &&
-          time == other.time &&
-          electricCurrent == other.electricCurrent &&
-          temperature == other.temperature &&
-          amountOfSubstance == other.amountOfSubstance &&
-          luminousIntensity == other.luminousIntensity;
+  bool operator ==(Object other) {
+    if (other is! Dimension) return false;
+    const double tolerance = 1e-9;
+    return (mass - other.mass).abs() < tolerance &&
+        (length - other.length).abs() < tolerance &&
+        (time - other.time).abs() < tolerance &&
+        (electricCurrent - other.electricCurrent).abs() < tolerance &&
+        (temperature - other.temperature).abs() < tolerance &&
+        (amountOfSubstance - other.amountOfSubstance).abs() < tolerance &&
+        (luminousIntensity - other.luminousIntensity).abs() < tolerance;
+  }
 
   @override
   int get hashCode =>
@@ -73,59 +106,59 @@ class Unit {
 final Map<String, Unit> baseUnits = {
   'kg': Unit(
     name: 'kg',
-    dimension: Dimension(mass: 1),
+    dimension: Dimension(mass: 1.0),
   ),
   'g': Unit(
     name: 'g',
-    dimension: Dimension(mass: 1),
+    dimension: Dimension(mass: 1.0),
   ),
   'm': Unit(
     name: 'm',
-    dimension: Dimension(length: 1),
+    dimension: Dimension(length: 1.0),
   ),
   'meter': Unit(
     name: 'meter',
-    dimension: Dimension(length: 1),
+    dimension: Dimension(length: 1.0),
   ),
   's': Unit(
     name: 's',
-    dimension: Dimension(time: 1),
+    dimension: Dimension(time: 1.0),
   ),
   'second': Unit(
     name: 'second',
-    dimension: Dimension(time: 1),
+    dimension: Dimension(time: 1.0),
   ),
   'A': Unit(
     name: 'A',
-    dimension: Dimension(electricCurrent: 1),
+    dimension: Dimension(electricCurrent: 1.0),
   ),
   'K': Unit(
     name: 'K',
-    dimension: Dimension(temperature: 1),
+    dimension: Dimension(temperature: 1.0),
   ),
   'mol': Unit(
     name: 'mol',
-    dimension: Dimension(amountOfSubstance: 1),
+    dimension: Dimension(amountOfSubstance: 1.0),
   ),
   'cd': Unit(
     name: 'cd',
-    dimension: Dimension(luminousIntensity: 1),
+    dimension: Dimension(luminousIntensity: 1.0),
   ),
   'N': Unit(
     name: 'N',
-    dimension: Dimension(mass: 1, length: 1, time: -2), // Newton: kg*m/s²
+    dimension: Dimension(mass: 1.0, length: 1.0, time: -2.0),
   ),
   'Pa': Unit(
     name: 'Pa',
-    dimension: Dimension(mass: 1, length: -1, time: -2), // Pascal: N/m²
+    dimension: Dimension(mass: 1.0, length: -1.0, time: -2.0),
   ),
   'J': Unit(
     name: 'J',
-    dimension: Dimension(mass: 1, length: 2, time: -2), // Joule: N*m
+    dimension: Dimension(mass: 1.0, length: 2.0, time: -2.0),
   ),
   'W': Unit(
     name: 'W',
-    dimension: Dimension(mass: 1, length: 2, time: -3), // Watt: J/s
+    dimension: Dimension(mass: 1.0, length: 2.0, time: -3.0),
   ),
   // Add more units as needed
 };
