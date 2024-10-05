@@ -1,7 +1,7 @@
 // lib/pages/settings_page.dart
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:flutter/material.dart';
 import '../providers/settings_provider.dart';
 import '../services/ad_service.dart';
 import '../widgets/ad_preferences_tile.dart';
@@ -18,7 +18,6 @@ class SettingsPage extends StatelessWidget {
 
   final AdService _adService = AdService();
 
-
   SettingsPage({super.key});
 
   @override
@@ -29,7 +28,7 @@ class SettingsPage extends StatelessWidget {
 
     return PopScope(
       onPopInvoked: (inv) async {
-        if (settingsProvider.settings.adPlacement == "Interstitial"){
+        if (settingsProvider.settings.adPlacement == "Interstitial") {
           if (_adService.showInterstitialAd()) {
             await Future.delayed(const Duration(seconds: 1));
           }
@@ -39,7 +38,6 @@ class SettingsPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Settings'),
-
         ),
         body: ListView(
           padding: const EdgeInsets.all(16),
@@ -47,8 +45,8 @@ class SettingsPage extends StatelessWidget {
             // Dark Mode Toggle
             SwitchListTile(
               title: const Text('Dark Mode'),
-              subtitle:
-              const Text('Enable Dark Mode for a better viewing experience.'),
+              subtitle: const Text(
+                  'Enable Dark Mode for a better viewing experience.'),
               value: settings.isDarkMode,
               onChanged: (bool value) {
                 settingsProvider.toggleDarkMode(value);
@@ -69,9 +67,9 @@ class SettingsPage extends StatelessWidget {
                   value: settings.adPlacement,
                   items: adPlacements
                       .map((placement) => DropdownMenuItem(
-                    value: placement,
-                    child: Text(placement),
-                  ))
+                            value: placement,
+                            child: Text(placement),
+                          ))
                       .toList(),
                   onChanged: (String? newValue) {
                     if (newValue != null) {
@@ -105,14 +103,10 @@ class SettingsPage extends StatelessWidget {
               ),
             ),
           ],
-        ),
-        // Conditional Ad Placement
+        ), // Conditional Ad Placement
         bottomNavigationBar: settingsProvider.settings.showAds &&
-            settingsProvider.settings.adPlacement == 'Bottom Banner'
-            ? SizedBox(
-            height: 50,
-            child: _adService.bannerAd()
-        )
+                settingsProvider.settings.adPlacement == 'Bottom Banner'
+            ? SizedBox(height: 50, child: _adService.bannerAd())
             : null,
       ),
     );

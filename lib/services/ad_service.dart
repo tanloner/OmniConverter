@@ -48,16 +48,15 @@ class AdService {
     InterstitialAd.load(
         adUnitId: AdHelper.intersticialOneAdUnitId,
         request: const AdRequest(),
-        adLoadCallback: InterstitialAdLoadCallback(
-            onAdLoaded: (InterstitialAd ad) {
-              _interstitialAd = ad;
-              _isInterstitialReady = true;
-              print("Interstitial Ad Loaded");
-            },
-            onAdFailedToLoad: (LoadAdError error) {
-              _isInterstitialReady = false;
-              print("Failed to load interstitial ad: ${error.message}");
-            }));
+        adLoadCallback:
+            InterstitialAdLoadCallback(onAdLoaded: (InterstitialAd ad) {
+          _interstitialAd = ad;
+          _isInterstitialReady = true;
+          print("Interstitial Ad Loaded");
+        }, onAdFailedToLoad: (LoadAdError error) {
+          _isInterstitialReady = false;
+          print("Failed to load interstitial ad: ${error.message}");
+        }));
   }
 
   bool showInterstitialAd() {

@@ -63,7 +63,7 @@ class Lexer {
       }
 
       // Handle unit names (alphabetic characters)
-      if (_isAlpha(currentChar)) {
+      if (_isAlpha(currentChar)) { //TODO: stuff like Ω is not seen as alphanumeric
         String unitName = '';
         while (pos < length && (_isAlpha(input[pos]) || _isDigit(input[pos]))) {
           unitName += input[pos];
@@ -81,12 +81,10 @@ class Lexer {
           number += currentChar;
           pos++;
           if (pos >= length || !_isDigit(input[pos])) {
-            throw FormatException(
-                'Invalid exponent format at position $pos');
+            throw FormatException('Invalid exponent format at position $pos');
           }
         }
-        while (pos < length &&
-            (_isDigit(input[pos]) || input[pos] == '.')) {
+        while (pos < length && (_isDigit(input[pos]) || input[pos] == '.')) {
           if (input[pos] == '.') {
             if (hasDecimal) {
               throw FormatException(
@@ -101,22 +99,25 @@ class Lexer {
         continue;
       }
 
-      throw FormatException('Unknown character "$currentChar" at position $pos');
+      throw FormatException(
+          'Unknown character "$currentChar" at position $pos');
     }
 
     tokens.add(Token(TokenType.eof, ''));
     return tokens;
   }
 
-  bool _isWhitespace(String ch) => ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r';
+  bool _isWhitespace(String ch) =>
+      ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r';
 
   bool _isAlpha(String ch) =>
       (ch.codeUnitAt(0) >= 'a'.codeUnitAt(0) &&
           ch.codeUnitAt(0) <= 'z'.codeUnitAt(0)) ||
-          (ch.codeUnitAt(0) >= 'A'.codeUnitAt(0) &&
-              ch.codeUnitAt(0) <= 'Z'.codeUnitAt(0));
+      (ch.codeUnitAt(0) >= 'A'.codeUnitAt(0) &&
+          ch.codeUnitAt(0) <= 'Z'.codeUnitAt(0));
 
-  bool _isDigit(String ch) => ch.codeUnitAt(0) >= '0'.codeUnitAt(0) &&
+  bool _isDigit(String ch) =>
+      ch.codeUnitAt(0) >= '0'.codeUnitAt(0) &&
       ch.codeUnitAt(0) <= '9'.codeUnitAt(0);
 }
 
@@ -167,9 +168,9 @@ class Parser {
     Dimension factor = parseFactor();
 
     if (currentToken.type == TokenType.exponent) {
-      eat(TokenType.exponent);
+      eat(TokenType.exponent); //the ^ sign
       String exponentStr = currentToken.value;
-      eat(TokenType.exponent);
+      eat(TokenType.exponent); //the actual value
       double exponent = double.parse(exponentStr);
       factor = factor.pow(exponent);
     }

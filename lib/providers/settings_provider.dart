@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../models/settings.dart';
 
 class SettingsProvider with ChangeNotifier {
@@ -60,7 +61,7 @@ class SettingsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateMaxCombinationSize(int size) async{
+  Future<void> updateMaxCombinationSize(int size) async {
     _settings.maxCombinationSize = size;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('maxCombinationSize', size);

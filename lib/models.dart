@@ -1,4 +1,3 @@
-
 // lib/models.dart
 
 class Dimension {
@@ -28,10 +27,8 @@ class Dimension {
       time: time + other.time,
       electricCurrent: electricCurrent + other.electricCurrent,
       temperature: temperature + other.temperature,
-      amountOfSubstance:
-          amountOfSubstance + other.amountOfSubstance,
-      luminousIntensity:
-          luminousIntensity + other.luminousIntensity,
+      amountOfSubstance: amountOfSubstance + other.amountOfSubstance,
+      luminousIntensity: luminousIntensity + other.luminousIntensity,
     );
   }
 
@@ -43,10 +40,8 @@ class Dimension {
       time: time - other.time,
       electricCurrent: electricCurrent - other.electricCurrent,
       temperature: temperature - other.temperature,
-      amountOfSubstance:
-          amountOfSubstance - other.amountOfSubstance,
-      luminousIntensity:
-          luminousIntensity - other.luminousIntensity,
+      amountOfSubstance: amountOfSubstance - other.amountOfSubstance,
+      luminousIntensity: luminousIntensity - other.luminousIntensity,
     );
   }
 
@@ -58,10 +53,8 @@ class Dimension {
       time: time * exponent,
       electricCurrent: electricCurrent * exponent,
       temperature: temperature * exponent,
-      amountOfSubstance:
-          amountOfSubstance * exponent,
-      luminousIntensity:
-          luminousIntensity * exponent,
+      amountOfSubstance: amountOfSubstance * exponent,
+      luminousIntensity: luminousIntensity * exponent,
     );
   }
 
@@ -100,108 +93,119 @@ class Unit {
   final Dimension dimension;
 
   Unit({required this.name, required this.dimension});
+
+  @override
+  String toString() {
+    return "${super.toString()}\nName: $name\nDimensions: ${dimension.toString()}\n";
+  }
 }
 
 // Define base units with their dimensions
 final Map<String, Unit> baseUnits = {
   'kg': Unit(
-    name: 'kilogram',
+    name: 'kg',
     dimension: Dimension(mass: 1.0),
   ),
   'm': Unit(
-    name: 'metre',
+    name: 'm',
     dimension: Dimension(length: 1.0),
   ),
   's': Unit(
-    name: 'second',
+    name: 's',
     dimension: Dimension(time: 1.0),
   ),
   'A': Unit(
-    name: 'ampere',
+    name: 'A',
     dimension: Dimension(electricCurrent: 1.0),
   ),
   'K': Unit(
-    name: 'kelvin',
+    name: 'K',
     dimension: Dimension(temperature: 1.0),
   ),
   'mol': Unit(
-    name: 'mole',
+    name: 'mol',
     dimension: Dimension(amountOfSubstance: 1.0),
   ),
   'cd': Unit(
-    name: 'candela',
+    name: 'cd',
     dimension: Dimension(luminousIntensity: 1.0),
   ),
   'N': Unit(
-    name: 'newton',
+    name: 'N',
     dimension: Dimension(mass: 1.0, length: 1.0, time: -2.0),
   ),
   'Pa': Unit(
-    name: 'pascal',
+    name: 'Pa',
     dimension: Dimension(mass: 1.0, length: -1.0, time: -2.0),
   ),
   'J': Unit(
-    name: 'joule',
+    name: 'J',
     dimension: Dimension(mass: 1.0, length: 2.0, time: -2.0),
   ),
   'W': Unit(
-    name: 'watt',
+    name: 'W',
     dimension: Dimension(mass: 1.0, length: 2.0, time: -3.0),
   ),
   'C': Unit(
-    name: 'coulomb',
+    name: 'C',
     dimension: Dimension(electricCurrent: 1.0, time: 1.0),
   ),
   'V': Unit(
-    name: 'volt',
-    dimension: Dimension(mass: 1.0, length: 2.0, electricCurrent: -1.0, time: -3.0),
+    name: 'V',
+    dimension:
+        Dimension(mass: 1.0, length: 2.0, electricCurrent: -1.0, time: -3.0),
   ),
   'F': Unit(
-    name: 'farad',
-    dimension: Dimension(mass: -1.0, length: -2.0, time: 4.0, electricCurrent: 2.0),
+    name: 'F',
+    dimension:
+        Dimension(mass: -1.0, length: -2.0, time: 4.0, electricCurrent: 2.0),
   ),
-  'Ω': Unit(
+  'ohm': Unit( //TODO: Ω is not seen as alphanumeric. Problem in lexer (unit_parser.dart)
     name: 'ohm',
-    dimension: Dimension(mass: 1.0, length: 2.0, electricCurrent: -2.0, time: -3.0),
+    dimension:
+        Dimension(mass: 1.0, length: 2.0, electricCurrent: -2.0, time: -3.0),
   ),
   'S': Unit(
-    name: 'siemens',
-    dimension: Dimension(mass: -1.0, length: -2.0, time: 3.0, electricCurrent: 2.0),
+    name: 'S',
+    dimension:
+        Dimension(mass: -1.0, length: -2.0, time: 3.0, electricCurrent: 2.0),
   ),
   'Wb': Unit(
-    name: 'weber',
-    dimension: Dimension(mass: 1.0, length: 2.0, electricCurrent: -1.0, time: -1.0),
+    name: 'Wb',
+    dimension:
+        Dimension(mass: 1.0, length: 2.0, electricCurrent: -1.0, time: -1.0),
   ),
   'T': Unit(
-    name: 'tesla',
+    name: 'T',
     dimension: Dimension(mass: 1.0, electricCurrent: -1.0, time: -2.0),
   ),
   'H': Unit(
-    name: 'henry',
-    dimension: Dimension(mass: 1.0, length: 2.0, electricCurrent: -2.0, time: -2.0),
+    name: 'H',
+    dimension:
+        Dimension(mass: 1.0, length: 2.0, electricCurrent: -2.0, time: -2.0),
   ),
   'lm': Unit(
-    name: 'lumen',
+    name: 'lm',
     dimension: Dimension(luminousIntensity: 1.0),
   ),
   'lx': Unit(
-    name: 'lux',
+    name: 'lx',
     dimension: Dimension(luminousIntensity: 1.0, length: -2.0),
   ),
   'Bq': Unit(
-    name: 'becquerel',
+    name: 'Bq',
     dimension: Dimension(time: -1.0),
   ),
   'Gy': Unit(
-    name: 'gray',
+    name: 'Gy',
     dimension: Dimension(length: 2.0, time: -2.0),
   ),
   'Sv': Unit(
-    name: 'sievert',
+    name: 'Sv',
     dimension: Dimension(length: 2.0, time: -2.0),
   ),
   'kat': Unit(
-    name: 'katal',
+    name: 'kat',
     dimension: Dimension(amountOfSubstance: 1.0, time: -1.0),
   ),
 };

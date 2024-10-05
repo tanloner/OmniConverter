@@ -11,17 +11,15 @@ class UnitConverterHomePage extends StatefulWidget {
   const UnitConverterHomePage({super.key});
 
   @override
-  _UnitConverterHomePageState createState() => _UnitConverterHomePageState();
+  UnitConverterHomePageState createState() => UnitConverterHomePageState();
 }
 
-class _UnitConverterHomePageState extends State<UnitConverterHomePage> {
+class UnitConverterHomePageState extends State<UnitConverterHomePage> {
   final TextEditingController _inputUnitController = TextEditingController();
   final TextEditingController _otherUnitsController = TextEditingController();
   String _result = '';
   bool _isProcessing = false;
   final AdService _adService = AdService();
-
-
 
   void _processUnits() async {
     setState(() {
@@ -31,8 +29,8 @@ class _UnitConverterHomePageState extends State<UnitConverterHomePage> {
 
     String inputUnitStr = _inputUnitController.text.trim();
     String otherUnitsStr = _otherUnitsController.text.trim();
-    final settingsProvider = Provider.of<SettingsProvider>(context, listen: false);
-
+    final settingsProvider =
+        Provider.of<SettingsProvider>(context, listen: false);
 
     if (inputUnitStr.isEmpty || otherUnitsStr.isEmpty) {
       setState(() {
@@ -85,6 +83,8 @@ class _UnitConverterHomePageState extends State<UnitConverterHomePage> {
 
       // Find the unit in baseUnits
       Unit? unit = baseUnits[unitStr];
+      unit ??= Unit(name: unitStr, dimension: dim);
+      /*
       if (unit == null) {
         setState(() {
           _result =
@@ -93,7 +93,7 @@ class _UnitConverterHomePageState extends State<UnitConverterHomePage> {
         });
         return;
       }
-
+      */
       otherUnits.add(unit);
     }
     CombinationFinder finder = CombinationFinder(
@@ -104,7 +104,6 @@ class _UnitConverterHomePageState extends State<UnitConverterHomePage> {
 
     List<String> combinations = finder.findCombinations();
     combinations = combinations.toSet().toList();
-
 
     setState(() {
       if (combinations.isNotEmpty) {
@@ -128,82 +127,90 @@ class _UnitConverterHomePageState extends State<UnitConverterHomePage> {
   Widget build(BuildContext context) {
     final settingsProvider = Provider.of<SettingsProvider>(context);
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Unit Converter Pro'),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.settings),
-              onPressed: () {
-                Navigator.pushNamed(context, '/settings');
-              },
-              tooltip: 'Settings',
-            ),
-          ],
-        ),
-        body: Column(
-          children: [
-            if (settingsProvider.settings.showAds && settingsProvider.settings.adPlacement == "Top Banner")
-              Container(
+      appBar: AppBar(
+        title: const Text('Unit Converter Pro'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              Navigator.pushNamed(context, '/settings');
+            },
+            tooltip: 'Settings',
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          if (settingsProvider.settings.showAds &&
+              settingsProvider.settings.adPlacement == "Top Banner")
+            Container(
                 padding: const EdgeInsets.all(8.0),
                 alignment: Alignment.center,
-                child: _adService.bannerAd()
-              ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    // Input Unit
-                    TextField(
-                      controller: _inputUnitController,
-                      decoration: const InputDecoration(
-                        labelText: 'Enter Unit/Formula',
-                        hintText: 'e.g., Newton (N) or F = ma',
-                        border: OutlineInputBorder(),
-                      ),
+                child: _adService.bannerAd()),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  // Input Unit
+                  TextField(
+                    controller: _inputUnitController,
+                    decoration: const InputDecoration(
+                      labelText: 'Enter Unit/Formula',
+                      hintText: 'e.g., Newton (N) or F = ma',
+                      border: OutlineInputBorder(),
                     ),
-                    const SizedBox(height: 16),
-                    // Other Units
-                    TextField(
-                      controller: _otherUnitsController,
-                      decoration: const InputDecoration(
-                        labelText: 'List of Other Units',
-                        hintText: 'e.g., kg, m, s, A, K, mol, cd',
-                        border: OutlineInputBorder(),
-                      ),
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
+                  ),
+                  const SizedBox(height: 16),
+                  // Other Units
+                  TextField(
+                    controller: _otherUnitsController,
+                    decoration: const InputDecoration(
+                      labelText: 'List of Other Units',
+                      hintText: 'e.g., kg, m, s, A, K, mol, cd',
+                      border: OutlineInputBorder(),
                     ),
-                    const SizedBox(height: 16),
-                    // Calculate Button
-                    ElevatedButton(
-                      onPressed: _isProcessing ? null : _processUnits,
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(double.infinity, 50), // Full width button
-                        animationDuration: const Duration(minutes: 1),
-                        backgroundColor: settingsProvider.settings.isDarkMode ? Colors.deepPurple : Colors.blueAccent,
-                        disabledBackgroundColor: settingsProvider.settings.isDarkMode ? Colors.grey[700] : Colors.grey[300],
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12), // Rounded corners
-                        ),
-                        elevation: 5, // Slight elevation for a shadow effect
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                  ),
+                  const SizedBox(height: 16),
+                  // Calculate Button
+                  ElevatedButton(
+                    onPressed: _isProcessing ? null : _processUnits,
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(double.infinity, 50),
+                      // Full width button
+                      animationDuration: const Duration(minutes: 1),
+                      backgroundColor: settingsProvider.settings.isDarkMode
+                          ? Colors.deepPurple
+                          : Colors.blueAccent,
+                      disabledBackgroundColor:
+                          settingsProvider.settings.isDarkMode
+                              ? Colors.grey[700]
+                              : Colors.grey[300],
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(12), // Rounded corners
                       ),
-                      child: _isProcessing
-                          ? const CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      )
-                          : Text(
-                        'Calculate',
-                        style: TextStyle(
-                          color: _isProcessing
-                              ? Colors.grey[300] // Greyed out when processing
-                              : Colors.white, // White text color
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      elevation: 5, // Slight elevation for a shadow effect
                     ),
-                    const SizedBox(height: 16),
+                    child: _isProcessing
+                        ? const CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
+                          )
+                        : Text(
+                            'Calculate',
+                            style: TextStyle(
+                              color: _isProcessing
+                                  ? Colors
+                                      .grey[300] // Greyed out when processing
+                                  : Colors.white, // White text color
+                              fontSize: 16, fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                  ),
+                  const SizedBox(height: 16),
                   // Output Field
                   Expanded(
                     child: SingleChildScrollView(
@@ -225,17 +232,14 @@ class _UnitConverterHomePageState extends State<UnitConverterHomePage> {
                   ),
                 ],
               ),
-                    ),
             ),
-          ],
-        ),
+          ),
+        ],
+      ),
       // Conditional Ad Placement
       bottomNavigationBar: settingsProvider.settings.showAds &&
-          settingsProvider.settings.adPlacement == 'Bottom Banner'
-          ? SizedBox(
-        height: 50,
-        child: _adService.bannerAd()
-      )
+              settingsProvider.settings.adPlacement == 'Bottom Banner'
+          ? SizedBox(height: 50, child: _adService.bannerAd())
           : null,
     );
   }

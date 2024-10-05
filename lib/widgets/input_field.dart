@@ -8,7 +8,8 @@ class InputField extends StatelessWidget {
   final String hint;
   final bool isMultiline;
 
-  const InputField({super.key,
+  const InputField({
+    super.key,
     required this.controller,
     required this.label,
     required this.hint,
@@ -24,8 +25,7 @@ class InputField extends StatelessWidget {
         hintText: hint,
         border: const OutlineInputBorder(),
       ),
-      keyboardType:
-      isMultiline ? TextInputType.multiline : TextInputType.text,
+      keyboardType: isMultiline ? TextInputType.multiline : TextInputType.text,
       maxLines: isMultiline ? null : 1,
     );
   }

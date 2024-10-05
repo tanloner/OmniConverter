@@ -1,14 +1,16 @@
 // lib/combination_finder.dart
 
+import 'package:flutter/foundation.dart';
+import 'dart:collection';
+
 import 'models.dart';
 import 'providers/settings_provider.dart';
-import 'package:provider/provider.dart';
-import 'models/settings.dart';
 
 class CombinationFinder {
   final List<Unit> availableUnits;
   final Dimension targetDimension;
   final SettingsProvider settingsProvider;
+  final HashMap<String, bool> memo = HashMap();
 
   CombinationFinder({
     required this.availableUnits,
@@ -21,19 +23,17 @@ class CombinationFinder {
     List<String> results = [];
 
     // Generate combinations from size 1 to maxCombinationSize
-    for (int size = 1; size <= settingsProvider.settings.maxCombinationSize; size++) {
-      _findCombinationsRecursive(
-          availableUnits, size, [], results);
+    for (int size = 1;
+        size <= settingsProvider.settings.maxCombinationSize;
+        size++) {
+      _findCombinationsRecursive(availableUnits, size, [], results);
     }
 
     return results;
   }
 
-  void _findCombinationsRecursive(
-      List<Unit> units,
-      int size,
-      List<CombinationStep> currentSteps,
-      List<String> results) {
+  void _findCombinationsRecursive(List<Unit> units, int size,
+      List<CombinationStep> currentSteps, List<String> results) {
     if (currentSteps.length == size) {
       // Calculate the combined dimension
       Dimension combined = Dimension();
@@ -53,8 +53,7 @@ class CombinationFinder {
         for (int i = 0; i < currentSteps.length; i++) {
           CombinationStep step = currentSteps[i];
           if (i > 0) {
-            combination +=
-            step.operation == Operation.multiply ? ' * ' : ' / ';
+            combination += step.operation == Operation.multiply ? ' * ' : ' / ';
           }
           combination += step.unit.name;
         }
@@ -65,12 +64,14 @@ class CombinationFinder {
 
     for (int i = 0; i < units.length; i++) {
       Unit unit = units[i];
+      if (kDebugMode){
+        print("current steps are $currentSteps");
+      }
 
       // Try different operations without applying exponents
       for (Operation op in Operation.values) {
         List<CombinationStep> newSteps = List.from(currentSteps)
-          ..add(CombinationStep(
-              unit: unit, operation: op));
+          ..add(CombinationStep(unit: unit, operation: op));
         _findCombinationsRecursive(
             units.sublist(i + 1), size, newSteps, results);
       }
@@ -88,4 +89,9 @@ class CombinationStep {
     required this.unit,
     required this.operation,
   });
+
+  @override
+  String toString() {
+    return "${unit.name} ${operation.name}";
+  }
 }
