@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:unit_converter/helpers/ad_helper.dart';
 
@@ -27,7 +28,9 @@ class AdService {
         listener: BannerAdListener(onAdLoaded: (_) {
           _isHomeBannerReady = true;
         }, onAdFailedToLoad: (ad, error) {
-          print("failed to load the ad banner. ${error.message}");
+          if (kDebugMode) {
+            print("failed to load the ad banner. ${error.message}");
+          }
           _isHomeBannerReady = false;
           ad.dispose();
         }),
@@ -52,10 +55,14 @@ class AdService {
             InterstitialAdLoadCallback(onAdLoaded: (InterstitialAd ad) {
           _interstitialAd = ad;
           _isInterstitialReady = true;
-          print("Interstitial Ad Loaded");
+          if (kDebugMode) {
+            print("Interstitial Ad Loaded");
+          }
         }, onAdFailedToLoad: (LoadAdError error) {
           _isInterstitialReady = false;
-          print("Failed to load interstitial ad: ${error.message}");
+          if (kDebugMode) {
+            print("Failed to load interstitial ad: ${error.message}");
+          }
         }));
   }
 
@@ -68,14 +75,18 @@ class AdService {
           loadInterstitialAd(); // Preload a new ad after the previous one is shown
         },
         onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
-          print("Failed to show interstitial ad: ${error.message}");
+          if (kDebugMode) {
+            print("Failed to show interstitial ad: ${error.message}");
+          }
           ad.dispose();
         },
       );
-      _isInterstitialReady = false; // Reset the flag until a new ad is loaded
+      _isInterstitialReady = false;
       return true;
     } else {
-      print("Interstitial Ad not ready yet.");
+      if (kDebugMode) {
+        print("Interstitial Ad not ready yet.");
+      }
       return false;
     }
   }
