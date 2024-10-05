@@ -18,9 +18,9 @@ class SettingsProvider with ChangeNotifier {
   Future<void> loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
     _settings = Settings(
-      isDarkMode: prefs.getBool('isDarkMode') ?? false,
+      isDarkMode: prefs.getBool('isDarkMode') ?? true,
       showAds: prefs.getBool('showAds') ?? true,
-      adPlacement: prefs.getString('adPlacement') ?? 'Bottom Banner',
+      adPlacements: prefs.getStringList('adPlacements') ?? ['Bottom Banner'],
       maxCombinationSize: prefs.getInt('maxCombinationSize') ?? 5,
     );
     notifyListeners();
@@ -32,7 +32,7 @@ class SettingsProvider with ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isDarkMode', _settings.isDarkMode);
     await prefs.setBool('showAds', _settings.showAds);
-    await prefs.setString('adPlacement', _settings.adPlacement);
+    await prefs.setStringList('adPlacements', _settings.adPlacements);
     await prefs.setInt('maxCombinationSize', _settings.maxCombinationSize);
     notifyListeners();
   }
@@ -54,10 +54,10 @@ class SettingsProvider with ChangeNotifier {
   }
 
   // Update Ad Placement
-  Future<void> updateAdPlacement(String placement) async {
-    _settings.adPlacement = placement;
+  Future<void> updateAdPlacements(List<String> placements) async {
+    _settings.adPlacements = placements;
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('adPlacement', _settings.adPlacement);
+    await prefs.setStringList('adPlacements', _settings.adPlacements);
     notifyListeners();
   }
 

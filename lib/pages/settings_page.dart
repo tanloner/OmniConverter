@@ -6,6 +6,7 @@ import '../providers/settings_provider.dart';
 import '../services/ad_service.dart';
 import '../widgets/ad_preferences_tile.dart';
 import '../widgets/max_combination_size_setting.dart';
+import '../widgets/multi_select_dialog.dart';
 
 class SettingsPage extends StatelessWidget {
   static const String routeName = '/settings';
@@ -28,7 +29,7 @@ class SettingsPage extends StatelessWidget {
 
     return PopScope(
       onPopInvoked: (inv) async {
-        if (settingsProvider.settings.adPlacement == "Interstitial") {
+        if (settingsProvider.settings.adPlacements.contains("Interstitial")) {
           if (_adService.showInterstitialAd()) {
             await Future.delayed(const Duration(seconds: 1));
           }
@@ -62,50 +63,29 @@ class SettingsPage extends StatelessWidget {
             ),
             if (settings.showAds)
               ListTile(
-                title: const Text('Ad Placement'),
-                trailing: DropdownButton<String>(
-                  value: settings.adPlacement,
-                  items: adPlacements
-                      .map((placement) => DropdownMenuItem(
-                            value: placement,
-                            child: Text(placement),
-                          ))
-                      .toList(),
-                  onChanged: (String? newValue) {
-                    if (newValue != null) {
-                      settingsProvider.updateAdPlacement(newValue);
-                    }
-                  },
-                ),
+                title: const Text('Ad Placements'),
+                subtitle: Text(settings.adPlacements.join(', ')),
+                trailing: const Icon(Icons.arrow_forward_ios),
+                onTap: () async {
+                  final selected = await showDialog<List<String>>(
+                    context: context,
+                    builder: (context) => MultiSelectDialog(
+                      items: adPlacements,
+                      initiallySelected: settings.adPlacements,
+                    ),
+                  );
+
+                  if (selected != null) {
+                    settingsProvider.updateAdPlacements(selected);
+                  }
+                },
               ),
             const Divider(),
             const MaxCombinationSizeSetting(),
-            // Add More Settings Button
-            ListTile(
-              title: ElevatedButton(
-                onPressed: () {
-                  // Placeholder for adding new settings
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: const Text('Add New Unit'),
-                      content: const Text('This feature is under development.'),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text('OK'),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                child: const Text('Add New Setting'),
-              ),
-            ),
           ],
         ), // Conditional Ad Placement
         bottomNavigationBar: settingsProvider.settings.showAds &&
-                settingsProvider.settings.adPlacement == 'Bottom Banner'
+                settingsProvider.settings.adPlacements.contains('Bottom Banner')
             ? SizedBox(height: 50, child: _adService.bannerAd())
             : null,
       ),

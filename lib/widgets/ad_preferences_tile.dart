@@ -40,7 +40,7 @@ class AdPreferencesTile extends StatelessWidget {
           onChanged: (bool value) {
             onToggleAds(value);
           },
-          activeColor: Theme.of(context).primaryColor,
+          //activeColor: Theme.of(context).primaryColor,
         ),
       ],
     );

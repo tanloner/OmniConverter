@@ -146,7 +146,7 @@ class UnitConverterHomePageState extends State<UnitConverterHomePage> {
       body: Column(
         children: [
           if (settingsProvider.settings.showAds &&
-              settingsProvider.settings.adPlacement == "Top Banner")
+              settingsProvider.settings.adPlacements.contains("Top Banner"))
             Container(
                 padding: const EdgeInsets.all(8.0),
                 alignment: Alignment.center,
@@ -242,7 +242,7 @@ class UnitConverterHomePageState extends State<UnitConverterHomePage> {
       ),
       // Conditional Ad Placement
       bottomNavigationBar: settingsProvider.settings.showAds &&
-              settingsProvider.settings.adPlacement == 'Bottom Banner'
+              settingsProvider.settings.adPlacements.contains('Bottom Banner')
           ? SizedBox(height: 50, child: _adService.bannerAd())
           : null,
     );

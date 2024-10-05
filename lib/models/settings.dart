@@ -1,13 +1,13 @@
 class Settings {
   bool isDarkMode;
   bool showAds;
-  String adPlacement;
+  List<String> adPlacements;
   int maxCombinationSize;
 
   Settings({
-    this.isDarkMode = false,
+    this.isDarkMode = true,
     this.showAds = true,
-    this.adPlacement = 'Bottom Banner',
+    this.adPlacements = const ['Bottom Banner'],
     this.maxCombinationSize = 5,
   });
 
@@ -16,7 +16,7 @@ class Settings {
     return {
       'isDarkMode': isDarkMode,
       'showAds': showAds,
-      'adPlacement': adPlacement,
+      'adPlacements': adPlacements,
       'maxCombinationSize': maxCombinationSize,
     };
   }
@@ -24,9 +24,9 @@ class Settings {
   // Create Settings from Map
   factory Settings.fromMap(Map<String, dynamic> map) {
     return Settings(
-      isDarkMode: map['isDarkMode'] ?? false,
+      isDarkMode: map['isDarkMode'] ?? true,
       showAds: map['showAds'] ?? true,
-      adPlacement: map['adPlacement'] ?? 'Bottom Banner',
+      adPlacements: map['adPlacement'] ?? ['Bottom Banner'],
       maxCombinationSize: map['maxCombinationSize'] ?? 5,
     );
   }
@@ -34,13 +34,13 @@ class Settings {
   Settings copyWith({
     bool? isDarkMode,
     bool? showAds,
-    String? adPlacement,
+    List<String>? adPlacements,
     int? maxCombinationSize,
   }) {
     return Settings(
       isDarkMode: isDarkMode ?? this.isDarkMode,
       showAds: showAds ?? this.showAds,
-      adPlacement: adPlacement ?? this.adPlacement,
+      adPlacements: adPlacements ?? this.adPlacements,
       maxCombinationSize: maxCombinationSize ?? this.maxCombinationSize,
     );
   }

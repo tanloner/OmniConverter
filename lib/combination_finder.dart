@@ -24,12 +24,13 @@ class CombinationFinder {
 
     // Generate combinations from size 1 to maxCombinationSize
     for (int size = 1;
-        size <=
-            min(settingsProvider.settings.maxCombinationSize,
-                availableUnits.length);
-        size++) {
+    size <= min(settingsProvider.settings.maxCombinationSize, availableUnits.length);
+    size++) {
       _findCombinationsRecursive(
-        availableUnits, size, [], Dimension(), // Start with a neutral dimension
+        availableUnits,
+        size,
+        [],
+        Dimension(), // Start with a neutral dimension
         results,
       );
     }
@@ -38,28 +39,17 @@ class CombinationFinder {
   }
 
   void _findCombinationsRecursive(
-    List<Unit> units,
-    int size,
-    List<CombinationStep> currentSteps,
-    Dimension combined,
-    List<String> results,
-  ) {
+      List<Unit> units,
+      int size,
+      List<CombinationStep> currentSteps,
+      Dimension combined,
+      List<String> results,
+      ) {
     if (currentSteps.length == size) {
       if (combined == targetDimension) {
-        // Create a combination string
-        String combination = '';
-        for (int i = 0; i < currentSteps.length; i++) {
-          CombinationStep step = currentSteps[i];
-          if (i > 0) {
-            combination += step.operation == Operation.multiply ? ' * ' : ' / ';
-          }
-          if (i == 0 && step.operation == Operation.divide) {
-            combination += "1/${step.unit.name}";
-          } else {
-            combination += step.unit.name;
-          }
-        }
-        if (combination == "s * s * s") {
+        // Create a combination string with exponents
+        String combination = _buildCombinationString(currentSteps);
+        if (combination == "s^3") { // Beispiel für Debugging
           if (kDebugMode) {
             print("combination: $combination");
             print("current steps: $currentSteps");
@@ -85,7 +75,9 @@ class CombinationFinder {
       });
 
       if (diffExponent.abs() > maxPossibleAdjustment) {
-        print("pruned");
+        if (kDebugMode) {
+          print("Pruned due to insufficient adjustment for component: $component");
+        }
         return;
       }
     }
@@ -93,7 +85,6 @@ class CombinationFinder {
     // Proceed with recursion
     for (int i = 0; i < units.length; i++) {
       Unit unit = units[i];
-      print("$unit");
       // Multiply
       Dimension newCombinedMultiply = combined * unit.dimension;
       List<CombinationStep> newStepsMultiply = List.from(currentSteps)
@@ -117,6 +108,51 @@ class CombinationFinder {
         newCombinedDivide,
         results,
       );
+    }
+  }
+
+  /// Builds a combination string where same units are represented with exponents.
+  String _buildCombinationString(List<CombinationStep> steps) {
+    // Map to hold unit names and their net exponents
+    Map<String, double> unitExponents = {};
+
+    for (CombinationStep step in steps) {
+      double exponentChange = step.operation == Operation.multiply ? 1.0 : -1.0;
+      unitExponents.update(
+        step.unit.name,
+            (existing) => existing + exponentChange,
+        ifAbsent: () => exponentChange,
+      );
+    }
+
+    // Separate units with positive and negative exponents
+    Map<String, double> positiveExponents = {};
+    Map<String, double> negativeExponents = {};
+
+    unitExponents.forEach((unit, exponent) {
+      if (exponent > 0) {
+        positiveExponents[unit] = exponent;
+      } else if (exponent < 0) {
+        negativeExponents[unit] = -exponent; // Store as positive for formatting
+      }
+    });
+
+    // Build numerator and denominator parts
+    String numerator = positiveExponents.entries.map((entry) {
+      return entry.value == 1.0 ? entry.key : "${entry.key}^${entry.value}";
+    }).join(' * ');
+
+    String denominator = negativeExponents.entries.map((entry) {
+      return entry.value == 1.0 ? entry.key : "${entry.key}^${entry.value}";
+    }).join(' * ');
+
+    if (denominator.isEmpty) {
+      return numerator;
+    } else if (numerator.isEmpty) {
+      // Handle cases like 1 / unit^x
+      return "1 / $denominator";
+    } else {
+      return "$numerator / $denominator";
     }
   }
 }
