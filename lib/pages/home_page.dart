@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:unit_converter/services/ad_service.dart';
@@ -103,6 +104,9 @@ class UnitConverterHomePageState extends State<UnitConverterHomePage> {
     );
 
     List<String> combinations = finder.findCombinations();
+    if (kDebugMode){
+      print("Combinations are: $combinations");
+    }
     combinations = combinations.toSet().toList();
 
     setState(() {

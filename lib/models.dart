@@ -72,6 +72,25 @@ class Dimension {
         (luminousIntensity - other.luminousIntensity).abs() < tolerance;
   }
 
+  double getExponent(DimensionComponent component) {
+    switch (component) {
+      case DimensionComponent.mass:
+        return mass;
+      case DimensionComponent.length:
+        return length;
+      case DimensionComponent.time:
+        return time;
+      case DimensionComponent.electricCurrent:
+        return electricCurrent;
+      case DimensionComponent.temperature:
+        return temperature;
+      case DimensionComponent.amountOfSubstance:
+        return amountOfSubstance;
+      case DimensionComponent.luminousIntensity:
+        return luminousIntensity;
+    }
+  }
+
   @override
   int get hashCode =>
       mass.hashCode ^
@@ -98,6 +117,17 @@ class Unit {
   String toString() {
     return "${super.toString()}\nName: $name\nDimensions: ${dimension.toString()}\n";
   }
+}
+
+// Enum for dimension components
+enum DimensionComponent {
+  mass,
+  length,
+  time,
+  electricCurrent,
+  temperature,
+  amountOfSubstance,
+  luminousIntensity,
 }
 
 // Define base units with their dimensions
