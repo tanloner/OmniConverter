@@ -1,5 +1,7 @@
 // lib/unit_parser.dart
 
+import 'package:flutter/foundation.dart';
+
 import 'models.dart';
 
 enum TokenType { unit, multiply, divide, exponent, lParen, rParen, eof }
@@ -215,7 +217,9 @@ class UnitParser {
     try {
       tokens = lexer.tokenize();
     } catch (e) {
-      print('Tokenization error: $e');
+      if (kDebugMode) {
+        print('Tokenization error: $e');
+      }
       return null;
     }
 
@@ -228,7 +232,9 @@ class UnitParser {
       }
       return dimension;
     } catch (e) {
-      print('Parsing error: $e');
+      if (kDebugMode) {
+        print('Parsing error: $e');
+      }
       return null;
     }
   }

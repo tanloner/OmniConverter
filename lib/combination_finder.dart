@@ -1,16 +1,19 @@
 // lib/combination_finder.dart
 
 import 'models.dart';
+import 'providers/settings_provider.dart';
+import 'package:provider/provider.dart';
+import 'models/settings.dart';
 
 class CombinationFinder {
   final List<Unit> availableUnits;
   final Dimension targetDimension;
-  final int maxCombinationSize;
+  final SettingsProvider settingsProvider;
 
   CombinationFinder({
     required this.availableUnits,
     required this.targetDimension,
-    this.maxCombinationSize = 3, // Limit to combinations of 3 units
+    required this.settingsProvider,
   });
 
   /// Finds all combinations of availableUnits that match the targetDimension.
@@ -18,7 +21,7 @@ class CombinationFinder {
     List<String> results = [];
 
     // Generate combinations from size 1 to maxCombinationSize
-    for (int size = 1; size <= maxCombinationSize; size++) {
+    for (int size = 1; size <= settingsProvider.settings.maxCombinationSize; size++) {
       _findCombinationsRecursive(
           availableUnits, size, [], results);
     }
@@ -35,7 +38,7 @@ class CombinationFinder {
       // Calculate the combined dimension
       Dimension combined = Dimension();
       for (CombinationStep step in currentSteps) {
-        Dimension stepDim = step.unit.dimension.pow(step.exponent);
+        Dimension stepDim = step.unit.dimension;
         if (step.operation == Operation.multiply) {
           combined = combined * stepDim;
         } else if (step.operation == Operation.divide) {
@@ -53,8 +56,7 @@ class CombinationFinder {
             combination +=
             step.operation == Operation.multiply ? ' * ' : ' / ';
           }
-          combination +=
-          step.exponent == 1 ? step.unit.name : '${step.unit.name}^${step.exponent}';
+          combination += step.unit.name;
         }
         results.add(combination);
       }
@@ -64,23 +66,15 @@ class CombinationFinder {
     for (int i = 0; i < units.length; i++) {
       Unit unit = units[i];
 
-      // Try different operations and exponents
+      // Try different operations without applying exponents
       for (Operation op in Operation.values) {
-        for (double exponent in _getPossibleExponents()) {
-          List<CombinationStep> newSteps = List.from(currentSteps)
-            ..add(CombinationStep(
-                unit: unit, operation: op, exponent: exponent));
-          _findCombinationsRecursive(
-              units.sublist(i + 1), size, newSteps, results);
-        }
+        List<CombinationStep> newSteps = List.from(currentSteps)
+          ..add(CombinationStep(
+              unit: unit, operation: op));
+        _findCombinationsRecursive(
+            units.sublist(i + 1), size, newSteps, results);
       }
     }
-  }
-
-  /// Defines possible exponents to consider for each unit.
-  List<double> _getPossibleExponents() {
-    // Define a range of exponents to consider, e.g., -2, -1, 0.5, 1, 2
-    return [-2.0, -1.0, 0.5, 1.0, 2.0];
   }
 }
 
@@ -89,11 +83,9 @@ enum Operation { multiply, divide }
 class CombinationStep {
   final Unit unit;
   final Operation operation;
-  final double exponent;
 
   CombinationStep({
     required this.unit,
     required this.operation,
-    required this.exponent,
   });
 }

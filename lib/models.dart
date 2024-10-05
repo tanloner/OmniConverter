@@ -23,45 +23,45 @@ class Dimension {
   // Multiply two dimensions
   Dimension operator *(Dimension other) {
     return Dimension(
-      mass: this.mass + other.mass,
-      length: this.length + other.length,
-      time: this.time + other.time,
-      electricCurrent: this.electricCurrent + other.electricCurrent,
-      temperature: this.temperature + other.temperature,
+      mass: mass + other.mass,
+      length: length + other.length,
+      time: time + other.time,
+      electricCurrent: electricCurrent + other.electricCurrent,
+      temperature: temperature + other.temperature,
       amountOfSubstance:
-          this.amountOfSubstance + other.amountOfSubstance,
+          amountOfSubstance + other.amountOfSubstance,
       luminousIntensity:
-          this.luminousIntensity + other.luminousIntensity,
+          luminousIntensity + other.luminousIntensity,
     );
   }
 
   // Divide two dimensions
   Dimension operator /(Dimension other) {
     return Dimension(
-      mass: this.mass - other.mass,
-      length: this.length - other.length,
-      time: this.time - other.time,
-      electricCurrent: this.electricCurrent - other.electricCurrent,
-      temperature: this.temperature - other.temperature,
+      mass: mass - other.mass,
+      length: length - other.length,
+      time: time - other.time,
+      electricCurrent: electricCurrent - other.electricCurrent,
+      temperature: temperature - other.temperature,
       amountOfSubstance:
-          this.amountOfSubstance - other.amountOfSubstance,
+          amountOfSubstance - other.amountOfSubstance,
       luminousIntensity:
-          this.luminousIntensity - other.luminousIntensity,
+          luminousIntensity - other.luminousIntensity,
     );
   }
 
   // Raise a dimension to a power
   Dimension pow(double exponent) {
     return Dimension(
-      mass: this.mass * exponent,
-      length: this.length * exponent,
-      time: this.time * exponent,
-      electricCurrent: this.electricCurrent * exponent,
-      temperature: this.temperature * exponent,
+      mass: mass * exponent,
+      length: length * exponent,
+      time: time * exponent,
+      electricCurrent: electricCurrent * exponent,
+      temperature: temperature * exponent,
       amountOfSubstance:
-          this.amountOfSubstance * exponent,
+          amountOfSubstance * exponent,
       luminousIntensity:
-          this.luminousIntensity * exponent,
+          luminousIntensity * exponent,
     );
   }
 
@@ -105,60 +105,103 @@ class Unit {
 // Define base units with their dimensions
 final Map<String, Unit> baseUnits = {
   'kg': Unit(
-    name: 'kg',
-    dimension: Dimension(mass: 1.0),
-  ),
-  'g': Unit(
-    name: 'g',
+    name: 'kilogram',
     dimension: Dimension(mass: 1.0),
   ),
   'm': Unit(
-    name: 'm',
-    dimension: Dimension(length: 1.0),
-  ),
-  'meter': Unit(
-    name: 'meter',
+    name: 'metre',
     dimension: Dimension(length: 1.0),
   ),
   's': Unit(
-    name: 's',
-    dimension: Dimension(time: 1.0),
-  ),
-  'second': Unit(
     name: 'second',
     dimension: Dimension(time: 1.0),
   ),
   'A': Unit(
-    name: 'A',
+    name: 'ampere',
     dimension: Dimension(electricCurrent: 1.0),
   ),
   'K': Unit(
-    name: 'K',
+    name: 'kelvin',
     dimension: Dimension(temperature: 1.0),
   ),
   'mol': Unit(
-    name: 'mol',
+    name: 'mole',
     dimension: Dimension(amountOfSubstance: 1.0),
   ),
   'cd': Unit(
-    name: 'cd',
+    name: 'candela',
     dimension: Dimension(luminousIntensity: 1.0),
   ),
   'N': Unit(
-    name: 'N',
+    name: 'newton',
     dimension: Dimension(mass: 1.0, length: 1.0, time: -2.0),
   ),
   'Pa': Unit(
-    name: 'Pa',
+    name: 'pascal',
     dimension: Dimension(mass: 1.0, length: -1.0, time: -2.0),
   ),
   'J': Unit(
-    name: 'J',
+    name: 'joule',
     dimension: Dimension(mass: 1.0, length: 2.0, time: -2.0),
   ),
   'W': Unit(
-    name: 'W',
+    name: 'watt',
     dimension: Dimension(mass: 1.0, length: 2.0, time: -3.0),
   ),
-  // Add more units as needed
+  'C': Unit(
+    name: 'coulomb',
+    dimension: Dimension(electricCurrent: 1.0, time: 1.0),
+  ),
+  'V': Unit(
+    name: 'volt',
+    dimension: Dimension(mass: 1.0, length: 2.0, electricCurrent: -1.0, time: -3.0),
+  ),
+  'F': Unit(
+    name: 'farad',
+    dimension: Dimension(mass: -1.0, length: -2.0, time: 4.0, electricCurrent: 2.0),
+  ),
+  'Ω': Unit(
+    name: 'ohm',
+    dimension: Dimension(mass: 1.0, length: 2.0, electricCurrent: -2.0, time: -3.0),
+  ),
+  'S': Unit(
+    name: 'siemens',
+    dimension: Dimension(mass: -1.0, length: -2.0, time: 3.0, electricCurrent: 2.0),
+  ),
+  'Wb': Unit(
+    name: 'weber',
+    dimension: Dimension(mass: 1.0, length: 2.0, electricCurrent: -1.0, time: -1.0),
+  ),
+  'T': Unit(
+    name: 'tesla',
+    dimension: Dimension(mass: 1.0, electricCurrent: -1.0, time: -2.0),
+  ),
+  'H': Unit(
+    name: 'henry',
+    dimension: Dimension(mass: 1.0, length: 2.0, electricCurrent: -2.0, time: -2.0),
+  ),
+  'lm': Unit(
+    name: 'lumen',
+    dimension: Dimension(luminousIntensity: 1.0),
+  ),
+  'lx': Unit(
+    name: 'lux',
+    dimension: Dimension(luminousIntensity: 1.0, length: -2.0),
+  ),
+  'Bq': Unit(
+    name: 'becquerel',
+    dimension: Dimension(time: -1.0),
+  ),
+  'Gy': Unit(
+    name: 'gray',
+    dimension: Dimension(length: 2.0, time: -2.0),
+  ),
+  'Sv': Unit(
+    name: 'sievert',
+    dimension: Dimension(length: 2.0, time: -2.0),
+  ),
+  'kat': Unit(
+    name: 'katal',
+    dimension: Dimension(amountOfSubstance: 1.0, time: -1.0),
+  ),
 };
