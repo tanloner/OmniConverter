@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/settings_provider.dart';
 
 class AdPreferencesTile extends StatelessWidget {
   final bool showAds;
@@ -9,10 +12,12 @@ class AdPreferencesTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final settingsProvider = Provider.of<SettingsProvider>(context);
+    final settings = settingsProvider.settings;
     return Column(
       children: [
         ListTile(
-          leading: Icon(Icons.info, color: Theme.of(context).primaryColor),
+          leading: settings.isDarkMode ? const Icon(Icons.info): Icon(Icons.info, color: Theme.of(context).primaryColor),
           title: const Text(
             'Ad Preferences',
             style: TextStyle(
@@ -27,7 +32,7 @@ class AdPreferencesTile extends StatelessWidget {
           ),
           trailing: IconButton(
             icon:
-                Icon(Icons.help_outline, color: Theme.of(context).primaryColor),
+                settings.isDarkMode ? const Icon(Icons.help_outline): Icon(Icons.help_outline, color: Theme.of(context).primaryColor),
             tooltip: 'Why should I enable ads?',
             onPressed: () {
               _showInfoDialog(context);

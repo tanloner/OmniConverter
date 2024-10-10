@@ -49,13 +49,6 @@ class CombinationFinder {
       if (combined == targetDimension) {
         // Create a combination string with exponents
         String combination = _buildCombinationString(currentSteps);
-        if (combination == "s^3") { // Beispiel für Debugging
-          if (kDebugMode) {
-            print("combination: $combination");
-            print("current steps: $currentSteps");
-            print("combined: $combined");
-          }
-        }
         results.add(combination);
       }
       return;

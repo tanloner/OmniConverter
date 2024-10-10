@@ -1,3 +1,4 @@
+// lib/pages/unit_converter_home_page.dart
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -9,6 +10,8 @@ import '../combination_finder.dart';
 import '../models.dart';
 import '../providers/settings_provider.dart';
 import '../unit_parser.dart';
+import '../widgets/custom_text_field.dart';
+import '../widgets/result_display.dart';
 
 class UnitConverterHomePage extends StatefulWidget {
   const UnitConverterHomePage({super.key});
@@ -87,16 +90,6 @@ class UnitConverterHomePageState extends State<UnitConverterHomePage> {
       // Find the unit in baseUnits
       Unit? unit = baseUnits[unitStr];
       unit ??= Unit(name: unitStr, dimension: dim);
-      /*
-      if (unit == null) {
-        setState(() {
-          _result =
-              'Unknown unit in the list: "$unitStr". Please ensure it is defined.';
-          _isProcessing = false;
-        });
-        return;
-      }
-      */
       otherUnits.add(unit);
     }
     CombinationFinder finder = CombinationFinder(
@@ -106,7 +99,7 @@ class UnitConverterHomePageState extends State<UnitConverterHomePage> {
     );
 
     List<String> combinations = finder.findCombinations();
-    if (kDebugMode){
+    if (kDebugMode) {
       print("Combinations are: $combinations");
     }
     combinations = combinations.toSet().toList();
@@ -132,9 +125,17 @@ class UnitConverterHomePageState extends State<UnitConverterHomePage> {
   @override
   Widget build(BuildContext context) {
     final settingsProvider = Provider.of<SettingsProvider>(context);
+    final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('OmniConverter'),
+        title: const Padding(
+          padding: EdgeInsets.fromLTRB(0, 16, 0, 0),
+          child: Text('OmniConverter'),
+        ),
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: theme.primaryColor,
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
@@ -145,108 +146,121 @@ class UnitConverterHomePageState extends State<UnitConverterHomePage> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          if (settingsProvider.settings.showAds &&
-              settingsProvider.settings.adPlacements.contains("Top Banner") && !kIsWeb && Platform.isAndroid)
-            Container(
-                padding: const EdgeInsets.all(8.0),
-                alignment: Alignment.center,
-                child: _adService.bannerAd()),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  // Input Unit
-                  TextField(
-                    controller: _inputUnitController,
-                    decoration: const InputDecoration(
-                      labelText: 'Enter Unit/Formula',
-                      hintText: 'e.g., Newton (N) or F = ma',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  // Other Units
-                  TextField(
-                    controller: _otherUnitsController,
-                    decoration: const InputDecoration(
-                      labelText: 'List of Other Units',
-                      hintText: 'e.g., kg, m, s, A, K, mol, cd',
-                      border: OutlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.multiline,
-                    maxLines: null,
-                  ),
-                  const SizedBox(height: 16),
-                  // Calculate Button
-                  ElevatedButton(
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          if (constraints.maxWidth > 800) {
+            // Web/Desktop Layout
+            return Center(
+              child: Container(
+                width: 800,
+                padding: const EdgeInsets.all(16.0),
+                child: _buildContent(context, settingsProvider),
+              ),
+            );
+          } else {
+            // Mobile Layout
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: _buildContent(context, settingsProvider),
+              ),
+            );
+          }
+        },
+      ),
+      bottomNavigationBar: _buildBottomAd(settingsProvider),
+    );
+  }
+
+  Widget _buildContent(BuildContext context, SettingsProvider settingsProvider) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // Top Ad Placement
+        if (settingsProvider.settings.showAds &&
+            settingsProvider.settings.adPlacements.contains("Top Banner") &&
+            !kIsWeb &&
+            Platform.isAndroid)
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            alignment: Alignment.center,
+            child: _adService.bannerAd(),
+          ),
+        const SizedBox(height: 16),
+          Column(
+              children: [
+                // Input Unit
+                CustomTextField(
+                  controller: _inputUnitController,
+                  labelText: 'Enter Unit/Formula',
+                  hintText: 'e.g., Newton (N) or F = ma',
+                  icon: Icons.calculate,
+                ),
+                const SizedBox(height: 16),
+                // Other Units
+                CustomTextField(
+                  controller: _otherUnitsController,
+                  labelText: 'List of Other Units',
+                  hintText: 'e.g., kg, m, s, A, K, mol, cd',
+                  icon: Icons.list,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                ),
+                const SizedBox(height: 24),
+                // Calculate Button
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
                     onPressed: _isProcessing ? null : _processUnits,
                     style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(double.infinity, 50),
-                      // Full width button
-                      animationDuration: const Duration(minutes: 1),
                       backgroundColor: settingsProvider.settings.isDarkMode
                           ? Colors.deepPurple
                           : Colors.blueAccent,
                       disabledBackgroundColor:
-                          settingsProvider.settings.isDarkMode
-                              ? Colors.grey[700]
-                              : Colors.grey[300],
+                      settingsProvider.settings.isDarkMode
+                          ? Colors.grey[700]
+                          : Colors.grey[300],
                       shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(12), // Rounded corners
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      elevation: 5, // Slight elevation for a shadow effect
+                      elevation: 5,
                     ),
                     child: _isProcessing
                         ? const CircularProgressIndicator(
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.white),
-                          )
-                        : Text(
-                            'Calculate',
-                            style: TextStyle(
-                              color: _isProcessing
-                                  ? Colors
-                                      .grey[300] // Greyed out when processing
-                                  : Colors.white, // White text color
-                              fontSize: 16, fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                  ),
-                  const SizedBox(height: 16),
-                  // Output Field
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Text(
-                          _result.isEmpty
-                              ? 'Your results will appear here.'
-                              : _result,
-                          style: const TextStyle(fontSize: 16),
-                        ),
+                      valueColor:
+                      AlwaysStoppedAnimation<Color>(Colors.white),
+                    )
+                        : const Text(
+                      'Calculate',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
-      // Conditional Ad Placement
-      bottomNavigationBar: settingsProvider.settings.showAds &&
-              settingsProvider.settings.adPlacements.contains('Bottom Banner') && !kIsWeb && Platform.isAndroid
-          ? SizedBox(height: 50, child: _adService.bannerAd())
-          : null,
+        const SizedBox(height: 16),
+        // Result Display
+        ResultDisplay(result: _result),
+      ],
     );
+  }
+
+  Widget? _buildBottomAd(SettingsProvider settingsProvider) {
+    if (settingsProvider.settings.showAds &&
+        settingsProvider.settings.adPlacements.contains('Bottom Banner') &&
+        !kIsWeb &&
+        Platform.isAndroid) {
+      return Container(
+        height: 60,
+        padding: const EdgeInsets.all(8.0),
+        child: _adService.bannerAd(),
+      );
+    }
+    return null;
   }
 }
