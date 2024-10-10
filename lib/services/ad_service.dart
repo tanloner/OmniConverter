@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:unit_converter/helpers/ad_helper.dart';
+import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class AdService {
   static bool _isInitialized = false;
@@ -11,9 +13,11 @@ class AdService {
   static bool _isInterstitialReady = false;
 
   static Future<void> initialize() async {
-    if (!_isInitialized) {
+    if (!_isInitialized && !kIsWeb && Platform.isAndroid) {
       MobileAds.instance.initialize();
       _isInitialized = true;
+    } else {
+      return;
     }
   }
 

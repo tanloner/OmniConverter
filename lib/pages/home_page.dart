@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -132,7 +134,7 @@ class UnitConverterHomePageState extends State<UnitConverterHomePage> {
     final settingsProvider = Provider.of<SettingsProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Unit Converter Pro'),
+        title: const Text('OmniConverter'),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
@@ -146,7 +148,7 @@ class UnitConverterHomePageState extends State<UnitConverterHomePage> {
       body: Column(
         children: [
           if (settingsProvider.settings.showAds &&
-              settingsProvider.settings.adPlacements.contains("Top Banner"))
+              settingsProvider.settings.adPlacements.contains("Top Banner") && !kIsWeb && Platform.isAndroid)
             Container(
                 padding: const EdgeInsets.all(8.0),
                 alignment: Alignment.center,
@@ -242,7 +244,7 @@ class UnitConverterHomePageState extends State<UnitConverterHomePage> {
       ),
       // Conditional Ad Placement
       bottomNavigationBar: settingsProvider.settings.showAds &&
-              settingsProvider.settings.adPlacements.contains('Bottom Banner')
+              settingsProvider.settings.adPlacements.contains('Bottom Banner') && !kIsWeb && Platform.isAndroid
           ? SizedBox(height: 50, child: _adService.bannerAd())
           : null,
     );

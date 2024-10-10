@@ -1,4 +1,7 @@
 // lib/pages/settings_page.dart
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -25,7 +28,9 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final settingsProvider = Provider.of<SettingsProvider>(context);
     final settings = settingsProvider.settings;
-    _adService.loadInterstitialAd();
+    if (!kIsWeb && Platform.isAndroid) {
+      _adService.loadInterstitialAd();
+    }
 
     return PopScope(
       onPopInvoked: (inv) async {
@@ -84,7 +89,7 @@ class SettingsPage extends StatelessWidget {
             const MaxCombinationSizeSetting(),
           ],
         ), // Conditional Ad Placement
-        bottomNavigationBar: settingsProvider.settings.showAds &&
+        bottomNavigationBar: settingsProvider.settings.showAds &&!kIsWeb && Platform.isAndroid &&
                 settingsProvider.settings.adPlacements.contains('Bottom Banner')
             ? SizedBox(height: 50, child: _adService.bannerAd())
             : null,
