@@ -62,7 +62,6 @@ class Lexer {
         continue;
       }
 
-      // Handle unit names (alphabetic characters)
       if (_isAlpha(currentChar)) { //TODO: stuff like Ω is not seen as alphanumeric
         String unitName = '';
         while (pos < length && (_isAlpha(input[pos]) || _isDigit(input[pos]))) {
@@ -73,7 +72,6 @@ class Lexer {
         continue;
       }
 
-      // Handle numbers (for exponents)
       if (_isDigit(currentChar) || currentChar == '-' || currentChar == '.') {
         String number = '';
         bool hasDecimal = false;
