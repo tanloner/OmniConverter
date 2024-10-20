@@ -102,7 +102,7 @@ class UnitConverterHomePageState extends State<UnitConverterHomePage> {
     if (kDebugMode) {
       print("Combinations are: $combinations");
     }
-    combinations = combinations.toSet().toList();
+    combinations = combinations.toSet().toList(); //TODO Add a switch whether to show results as units or as Symbols (instead of N for Newton you would see F for force)
 
     setState(() {
       if (combinations.isNotEmpty) {
@@ -151,10 +151,12 @@ class UnitConverterHomePageState extends State<UnitConverterHomePage> {
           if (constraints.maxWidth > 800) {
             // Web/Desktop Layout
             return Center(
-              child: Container(
-                width: 800,
-                padding: const EdgeInsets.all(16.0),
-                child: _buildContent(context, settingsProvider),
+              child: SingleChildScrollView(
+                child: Container(
+                  width: 800,
+                  padding: const EdgeInsets.all(16.0),
+                  child: _buildContent(context, settingsProvider),
+                ),
               ),
             );
           } else {
@@ -193,7 +195,7 @@ class UnitConverterHomePageState extends State<UnitConverterHomePage> {
                 CustomTextField(
                   controller: _inputUnitController,
                   labelText: 'Enter Unit/Formula',
-                  hintText: 'e.g., Newton (N) or F = ma',
+                  hintText: 'e.g., N*m (Newton * meter)',
                   icon: Icons.calculate,
                 ),
                 const SizedBox(height: 16),

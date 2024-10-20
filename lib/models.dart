@@ -130,6 +130,7 @@ enum DimensionComponent {
   luminousIntensity,
 }
 
+//TODO Add the actual names of units, and their symbols for future features
 // Define base units with their dimensions
 final Map<String, Unit> baseUnits = {
   'kg': Unit(
