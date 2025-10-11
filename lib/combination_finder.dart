@@ -132,11 +132,11 @@ class CombinationFinder {
 
     // Build numerator and denominator parts
     String numerator = positiveExponents.entries.map((entry) {
-      return entry.value == 1.0 ? entry.key : "${entry.key}^${entry.value}";
+      return entry.value == 1.0 ? entry.key : "${entry.key}^${entry.value.toStringAsPrecision(1)}";
     }).join(' * ');
 
     String denominator = negativeExponents.entries.map((entry) {
-      return entry.value == 1.0 ? entry.key : "${entry.key}^${entry.value}";
+      return entry.value == 1.0 ? entry.key : "${entry.key}^${entry.value.toStringAsPrecision(1)}";
     }).join(' * ');
 
     if (denominator.isEmpty) {

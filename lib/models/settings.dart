@@ -3,12 +3,14 @@ class Settings {
   bool showAds;
   List<String> adPlacements;
   int maxCombinationSize;
+  bool showBaseUnits;
 
   Settings({
     this.isDarkMode = true,
     this.showAds = true,
     this.adPlacements = const ['Bottom Banner'],
     this.maxCombinationSize = 5,
+    this.showBaseUnits = false,
   });
 
   // Convert Settings to Map for SharedPreferences
@@ -18,6 +20,7 @@ class Settings {
       'showAds': showAds,
       'adPlacements': adPlacements,
       'maxCombinationSize': maxCombinationSize,
+      'showBaseUnits': showBaseUnits,
     };
   }
 
@@ -28,6 +31,7 @@ class Settings {
       showAds: map['showAds'] ?? true,
       adPlacements: map['adPlacement'] ?? ['Bottom Banner'],
       maxCombinationSize: map['maxCombinationSize'] ?? 5,
+      showBaseUnits: map['showBaseUnits'] ?? false,
     );
   }
 
@@ -36,12 +40,14 @@ class Settings {
     bool? showAds,
     List<String>? adPlacements,
     int? maxCombinationSize,
+    bool? showBaseUnits,
   }) {
     return Settings(
       isDarkMode: isDarkMode ?? this.isDarkMode,
       showAds: showAds ?? this.showAds,
       adPlacements: adPlacements ?? this.adPlacements,
       maxCombinationSize: maxCombinationSize ?? this.maxCombinationSize,
+      showBaseUnits: showBaseUnits ?? this.showBaseUnits,
     );
   }
 }

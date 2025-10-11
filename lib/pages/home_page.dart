@@ -68,20 +68,21 @@ class UnitConverterHomePageState extends State<UnitConverterHomePage> {
     Dimension? inputDimension = parser.parse(inputUnitStr);
     if (inputDimension == null) {
       setState(() {
-        _result = 'Invalid input unit format or unknown units.';
+        _result = 'Invalid input unit format or unknown units.\nIs it an SI unit?\nDid you use symbols other than: ()/*^';
         _isProcessing = false;
       });
       return;
     }
 
     // Parse other units
+    otherUnitsList.sort((a, b) => a.compareTo(b));
     List<Unit> otherUnits = [];
     for (String unitStr in otherUnitsList) {
       Dimension? dim = parser.parse(unitStr);
       if (dim == null) {
         setState(() {
           _result =
-              'Invalid unit in the list: "$unitStr". Please check the unit names.';
+              'Invalid unit in the list: "$unitStr". Please check the unit names.\nIs it an SI unit? \nDid you use commas or semicolons for separation?';
           _isProcessing = false;
         });
         return;
@@ -100,7 +101,10 @@ class UnitConverterHomePageState extends State<UnitConverterHomePage> {
 
     List<String> combinations = finder.findCombinations();
     if (kDebugMode) {
-      print("Combinations are: $combinations");
+      //print("Combinations are: $combinations");
+
+      //String baseUnitStr = inputDimension.toFormulaString();
+      //print("$baseUnitStr Das hier ist der BaseUnitString!!!!\n\n\n");
     }
     combinations = combinations.toSet().toList(); //TODO Add a switch whether to show results as units or as Symbols (instead of N for Newton you would see F for force)
 
@@ -109,7 +113,11 @@ class UnitConverterHomePageState extends State<UnitConverterHomePage> {
         _result = 'Possible representations:\n${combinations.join('\n')}';
       } else {
         _result =
-            'It is not possible to represent "$inputUnitStr" with the provided units.';
+            'It is not possible to represent "$inputUnitStr" with the provided units.\n\nTry adding more units to the list\nor if there should be a combination increase the max combination Size in the Settings\nor enable the "Base Unit" feature in the Settings';
+      }
+      if (settingsProvider.settings.showBaseUnits){
+        String baseUnitStr = inputDimension.toFormulaString();
+        _result = '$_result\n\nBase Unit representation: \n$baseUnitStr';
       }
       _isProcessing = false;
     });
@@ -194,16 +202,16 @@ class UnitConverterHomePageState extends State<UnitConverterHomePage> {
                 // Input Unit
                 CustomTextField(
                   controller: _inputUnitController,
-                  labelText: 'Enter Unit/Formula',
-                  hintText: 'e.g., N*m (Newton * meter)',
+                  labelText: 'Composition of SI Units',
+                  hintText: 'e.g. N*m (Newton*meter)',
                   icon: Icons.calculate,
                 ),
                 const SizedBox(height: 16),
                 // Other Units
                 CustomTextField(
                   controller: _otherUnitsController,
-                  labelText: 'List of Other Units',
-                  hintText: 'e.g., kg, m, s, A, K, mol, cd',
+                  labelText: 'List of Other SI Units',
+                  hintText: 'e.g., kg, m, s^2, m or J',
                   icon: Icons.list,
                   keyboardType: TextInputType.multiline,
                   maxLines: null,

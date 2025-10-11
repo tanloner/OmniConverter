@@ -22,6 +22,7 @@ class SettingsProvider with ChangeNotifier {
       showAds: prefs.getBool('showAds') ?? true,
       adPlacements: prefs.getStringList('adPlacements') ?? ['Bottom Banner'],
       maxCombinationSize: prefs.getInt('maxCombinationSize') ?? 5,
+      showBaseUnits: prefs.getBool('showBaseUnits') ?? false,
     );
     notifyListeners();
   }
@@ -34,6 +35,7 @@ class SettingsProvider with ChangeNotifier {
     await prefs.setBool('showAds', _settings.showAds);
     await prefs.setStringList('adPlacements', _settings.adPlacements);
     await prefs.setInt('maxCombinationSize', _settings.maxCombinationSize);
+    await prefs.setBool('showBaseUnits', _settings.showBaseUnits);
     notifyListeners();
   }
 
@@ -65,6 +67,13 @@ class SettingsProvider with ChangeNotifier {
     _settings.maxCombinationSize = size;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('maxCombinationSize', size);
+    notifyListeners();
+  }
+
+  Future<void> updateShowBaseUnits(bool isEnabled) async{
+    _settings.showBaseUnits = isEnabled;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('showBaseUnits', isEnabled);
     notifyListeners();
   }
 }

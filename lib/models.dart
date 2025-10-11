@@ -91,6 +91,7 @@ class Dimension {
     }
   }
 
+
   @override
   int get hashCode =>
       mass.hashCode ^
@@ -104,6 +105,72 @@ class Dimension {
   @override
   String toString() {
     return 'M:$mass L:$length T:$time I:$electricCurrent Th:$temperature N:$amountOfSubstance J:$luminousIntensity';
+  }
+
+  double abs() {
+    return (mass.abs() + length.abs() + time.abs() + electricCurrent.abs() + temperature.abs() + amountOfSubstance.abs() + luminousIntensity.abs());
+  }
+
+  double sum(){
+    return (mass + length + time + electricCurrent + temperature + amountOfSubstance + luminousIntensity);
+  }
+
+  String toFormulaString() {
+    const double tolerance = 1e-9;
+    final components = [
+      Unit(name: 'kg', dimension: Dimension(mass: mass)),
+      Unit(name: 'm', dimension: Dimension(length: length)),
+      Unit(name: 's', dimension: Dimension(time: time)),
+      Unit(name: 'A', dimension: Dimension(electricCurrent: electricCurrent)),
+      Unit(name: 'K', dimension: Dimension(temperature: temperature)),
+      Unit(name: 'mol', dimension: Dimension(amountOfSubstance: amountOfSubstance)),
+      Unit(name: 'cd', dimension: Dimension(luminousIntensity: luminousIntensity)),
+    ];
+
+    List<String> numeratorTerms = [];
+    List<String> denominatorTerms = [];
+
+    for (var component in components) {
+      if (component.dimension.abs() < tolerance) continue;
+      if (component.dimension.sum() > 0) {
+        numeratorTerms.add(_formatTerm(component.name, component.dimension.sum()));
+      } else {
+        final positiveExponent = -component.dimension.sum();
+        denominatorTerms.add(_formatTerm(component.name, positiveExponent));
+      }
+    }
+
+    String numerator = numeratorTerms.join(' * ');
+    String denominator = denominatorTerms.join(' * ');
+
+    if (numerator.isEmpty && denominator.isEmpty) {
+      return '1';
+    } else if (denominator.isEmpty) {
+      return numerator.isNotEmpty ? numerator : '1';
+    } else if (numerator.isEmpty) {
+      return '1 / $denominator';
+    } else {
+      return '$numerator / $denominator';
+    }
+  }
+
+  String _formatTerm(String symbol, double exponent) {
+    String exponentStr = _formatExponent(exponent);
+    return exponent == 1 ? symbol : '$symbol^$exponentStr';
+  }
+
+  String _formatExponent(double value) {
+    const epsilon = 1e-9;
+    final roundedValue = value.roundToDouble();
+    if ((value - roundedValue).abs() < epsilon) {
+      return '${roundedValue.toInt()}';
+    } else {
+      String str = value.toString();
+      if (str.endsWith('.0')) {
+        return str.substring(0, str.length - 2);
+      }
+      return str;
+    }
   }
 }
 

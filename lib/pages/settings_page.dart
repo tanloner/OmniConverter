@@ -96,6 +96,29 @@ class SettingsPage extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
+        Card(
+          margin: const EdgeInsets.symmetric(vertical: 8),
+          child: SwitchListTile(
+            secondary: Icon(
+              settings.showBaseUnits ? Icons.visibility : Icons.visibility_off,
+              color: Theme.of(context).iconTheme.color,
+            ),
+            title: const Text('Base Units'),
+            subtitle: const Text('Display your Unit of Formula in Base Units'),
+            value: settings.showBaseUnits,
+            onChanged: (bool value) {
+              settingsProvider.updateShowBaseUnits(value);
+            },
+          ),
+        ),
+
+        const SizedBox(height: 8),
+        // Max Combination Size
+        const Card(
+          margin: EdgeInsets.symmetric(vertical: 8),
+          child: MaxCombinationSizeSetting(),
+        ),
+        const SizedBox(height: 8),
         // Ad Preferences
         Card(
           margin: const EdgeInsets.symmetric(vertical: 8),
@@ -129,12 +152,6 @@ class SettingsPage extends StatelessWidget {
               },
             ),
           ),
-        const SizedBox(height: 8),
-        // Max Combination Size
-        const Card(
-          margin: EdgeInsets.symmetric(vertical: 8),
-          child: MaxCombinationSizeSetting(),
-        ),
         const SizedBox(height: 8),
         // Additional Settings can be added here
       ],
