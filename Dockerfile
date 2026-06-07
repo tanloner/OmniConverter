@@ -1,25 +1,11 @@
-#Stage 1
-FROM debian:latest AS build-env
+FROM instrumentisto/flutter:3.41 AS build-env
 
-# Install flutter dependencies
-RUN apt-get update
-RUN apt-get install -y curl git wget unzip libgconf-2-4 gdb libstdc++6 libglu1-mesa fonts-droid-fallback lib32stdc++6 python3 sed
-RUN apt-get clean
+WORKDIR /app
 
-# Clone the flutter repo
-RUN git clone https://github.com/flutter/flutter.git /usr/local/flutter
 
-ENV PATH="${PATH}:/usr/local/flutter/bin:/usr/local/flutter/bin/cache/dart-sdk/bin"
-RUN flutter doctor -v
-RUN flutter channel master
-RUN flutter upgrade
-
-# build
-RUN mkdir /app/
-COPY . /app/
-WORKDIR /app/
+COPY . .
+RUN flutter pub get
 RUN flutter build web
 
-# Stage 2
 FROM nginx:1.21.1-alpine
 COPY --from=build-env /app/build/web /usr/share/nginx/html
