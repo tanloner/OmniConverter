@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:unit_converter/widgets/impressum.dart';
 
 import '../models/settings.dart';
 import '../providers/settings_provider.dart';
@@ -153,7 +154,8 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
         const SizedBox(height: 8),
-        // Additional Settings can be added here
+
+        const Impressum(),
       ],
     );
   }

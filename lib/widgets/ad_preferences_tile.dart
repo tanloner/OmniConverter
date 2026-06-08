@@ -60,8 +60,8 @@ class AdPreferencesTile extends StatelessWidget {
           content: const Text(
             'I don\'t really make much money writing apps like this, but I enjoy developing useful tools for people. '
             'By keeping ads activated, you help me cover some of the costs and motivate me to keep improving and creating more projects like this one. '
-            'Your support means a lot, and it helps ensure that I can continue to have the freedom and will to develop apps that make a difference.',
-          ),
+            'Your support means a lot, and it helps ensure that I can continue to have the freedom and will to develop apps that are useful',
+          ), //TODO: This text is terrible to read on large screens. have to fix that
           actions: [
             TextButton(
               child: const Text('Got it!'),

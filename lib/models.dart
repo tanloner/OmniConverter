@@ -91,7 +91,6 @@ class Dimension {
     }
   }
 
-
   @override
   int get hashCode =>
       mass.hashCode ^
@@ -108,11 +107,23 @@ class Dimension {
   }
 
   double abs() {
-    return (mass.abs() + length.abs() + time.abs() + electricCurrent.abs() + temperature.abs() + amountOfSubstance.abs() + luminousIntensity.abs());
+    return (mass.abs() +
+        length.abs() +
+        time.abs() +
+        electricCurrent.abs() +
+        temperature.abs() +
+        amountOfSubstance.abs() +
+        luminousIntensity.abs());
   }
 
-  double sum(){
-    return (mass + length + time + electricCurrent + temperature + amountOfSubstance + luminousIntensity);
+  double sum() {
+    return (mass +
+        length +
+        time +
+        electricCurrent +
+        temperature +
+        amountOfSubstance +
+        luminousIntensity);
   }
 
   String toFormulaString() {
@@ -177,8 +188,9 @@ class Dimension {
 class Unit {
   final String name;
   final Dimension dimension;
+  final String symbol;
 
-  Unit({required this.name, required this.dimension});
+  Unit({required this.name, required this.dimension, this.symbol = ""});
 
   @override
   String toString() {
@@ -258,11 +270,15 @@ final Map<String, Unit> baseUnits = {
     dimension:
         Dimension(mass: -1.0, length: -2.0, time: 4.0, electricCurrent: 2.0),
   ),
-  'ohm': Unit( //TODO: Ω is not seen as alphanumeric. Problem in lexer (unit_parser.dart)
+  'ohm': Unit(
     name: 'ohm',
     dimension:
         Dimension(mass: 1.0, length: 2.0, electricCurrent: -2.0, time: -3.0),
   ),
+  'Ω': Unit(
+      name: 'ohm',
+      dimension:
+          Dimension(mass: 1.0, length: 2.0, electricCurrent: -2.0, time: -3.0)),
   'S': Unit(
     name: 'S',
     dimension:

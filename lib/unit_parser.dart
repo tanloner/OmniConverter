@@ -62,7 +62,7 @@ class Lexer {
         continue;
       }
 
-      if (_isAlpha(currentChar)) { //TODO: stuff like Ω is not seen as alphanumeric
+      if (_isAlpha(currentChar) || currentChar == 'Ω') {
         String unitName = '';
         while (pos < length && (_isAlpha(input[pos]) || _isDigit(input[pos]))) {
           unitName += input[pos];
