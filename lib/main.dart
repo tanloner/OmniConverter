@@ -25,6 +25,7 @@ class UnitConverterApp extends StatelessWidget {
     return Consumer<SettingsProvider>(
       builder: (context, settingsProvider, child) {
         return MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'OmniConverter',
           theme: settingsProvider.settings.isDarkMode ? darkTheme : lightTheme,
           home: const UnitConverterHomePage(),
