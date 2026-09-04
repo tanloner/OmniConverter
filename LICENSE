@@ -1,0 +1,43 @@
+Custom Source-Available License
+
+Copyright (c) 2026 Quirin Stetten
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to use,
+copy, modify, and merge the Software, and to submit contributions (pull
+requests, patches, issues) back to this project, subject to the following
+conditions:
+
+1. Attribution
+   Any use of this Software, or of any code snippet extracted from it, must
+   retain a reference to the original author, Quirin Stetten, and a link to
+   the original repository where reasonably possible (e.g. in source code
+   comments, an "About"/credits screen, or a README).
+
+2. No redistribution of the app as a whole
+   You may NOT publish, distribute, sell, sublicense, or otherwise make
+   available the Software (in whole, or as a modified or repackaged version
+   that is substantially the same application) to third parties — whether for
+   free or for payment, and whether as source code, a compiled binary, or a
+   store listing (e.g. Google Play, App Store, F-Droid, etc.).
+   This restriction applies to the application as a whole. Individual code
+   snippets or components extracted and reused in a different project are
+   exempt from this restriction, provided the attribution requirement above
+   is met.
+
+3. No sale
+   You may NOT sell the Software, copies of it, or access to it.
+
+4. Contributions
+   By submitting a contribution (e.g. a pull request) to this project, you
+   agree that it may be included in the Software under this same license.
+
+5. No warranty
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY ARISING FROM THE
+   USE OF THE SOFTWARE.
+
+If you are unsure whether your intended use is covered by this license,
+please open an issue or contact the author.
