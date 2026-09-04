@@ -14,7 +14,7 @@ app in case you'd like to support me a little.
 
 <p align="center">
 <img src="images/img_1.png" width="200" alt="Home screen: converting N into J/m and A*V*s/m" />
-<img src="images/img.png" width="167" alt="Settings screen with dark mode, base units and ad preferences" />
+<img src="images/img.png" width="200" alt="Settings screen with dark mode, base units and ad preferences" />
 </p>
 
 ## Installation
